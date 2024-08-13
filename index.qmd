@@ -1,5 +1,5 @@
 ---
-title: "Template for Quarto Presentations with GitHub actions"
+title: "The 🤡Strike Incident"
 format:
     revealjs:
         theme: [serif] # More themes at https://quarto.org/docs/presentations/revealjs/themes.html
@@ -8,18 +8,66 @@ format:
         chalkboard: true
         code-line-numbers: false
         preview-links: auto
-author: "David Wilby"
-date: 04/08/2024 #Date in US format... MM/DD/YYYY
+author: "Thomas Phung"
+date: 08/21/2024 #Date in US format... MM/DD/YYYY
 date-format: "ddd Do MMMM YYYY"
-footer: "these slides: [davidwilby.dev/quarto-presentation-template](https://davidwilby.dev/quarto-presentation-template) - {{< fa brands github >}} [improve this talk!](https://github.com/davidwilby/quarto-presentation-template)"
+footer: "{{< fa brands github >}} [Improve this talk!](https://github.com/thomasphung/crowdstrike-presentation/)"
 from: markdown+emoji
 ---
 
-## First slide!
+## The Who, The What, and The Where
 
-## Second slide! {.smaller}
+- CrowdStrike offers a platform, "Falcon", that acts as a single pane of glass in monitoring of cybersecurity threats
+- Faulty update to one of Falcon software agents caused system outages
+- ~8.5 million Windows machines affected worldwide
 
-Content!
+::: {.notes}
+CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, etc. Can think of it like a glorified antivirus.
 
-Emojis are supported :smile:
+They have their hands in a lot of market sectors so they are considered as industry leaders in the security sector. 
+
+If you are not in the cyber space, then you probably haven't heard about this company until last month when 8.5 million Windows computers around the world experienced the blue screen of death, causing system outages and delays.
+:::
+
+## Timeline
+
+::: {.notes}
+So what happened is that on July 19th, CrowdStrike deployed an update 
+:::
+
+## The Culprit
+
+> "CrowdStrike was founded with a mission to protect customers against today’s adversaries and stop breaches. On July 19, 2024, as part of regular operations, <span class="highlight">CrowdStrike released a content configuration update (via channel files) for the Windows sensor that resulted in a system crash.</span> We apologize unreservedly."
+
+::: {.notes}
+In their "Channel File 291 RCA Exec Summary", CrowdStrike mentioned they pushed an update to a configuration file of 
+:::
+
+## Learnings
+Security is two-part mitigation and remediation. 1. Reduce risk and 2. Bounce back from an unlikely incident.
+
+- No Deploy Fridays
+- Security is everyone's responsibility; "a chain is only as strong as its weakest link"
+    - Trust, but verify; don't solely rely on upstream dependencies for security practices or disaster recovery
+- Don't just scan code. Data and configuration files are also attack vectors
+- Have a backup plan
+
+::: {.notes}
+So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike vulnerable to insider threats? You hear all the hype around implementing AI into products and even CrowdStrike is advertising themselves as the "future of AI-powered cybersecurity" In the realm of security and cybersecurity, you are not too big to fail.
+
+- No matter who you are on a project, please embed the culture of not deploying to your production environment on a Friday. In the event where something goes wrong, your Operations team should immediately be available, monitor the situation, and take the necessary steps to remediate
+- Have healthy paranoia and skepticism around your security posture and ask questions to verify them. I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and causing harm to lives.
+- I have been focusing on CrowdStrike but I would like to address all the organizations who are using their product
+:::
+
+## Fallout?
+
+
+## TL;DR
+
+
+## Sources
+- https://en.wikipedia.org/wiki/CrowdStrike
+- https://en.wikipedia.org/wiki/2024_CrowdStrike_incident
+- https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/
 
