@@ -1,2 +1,7 @@
 project:
   title: "index"
+
+format:
+  html:
+    css: styles/styles.css
+    
