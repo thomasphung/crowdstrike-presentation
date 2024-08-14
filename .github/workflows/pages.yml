@@ -1,4 +1,4 @@
-name: build to github pages
+name: Build to GitHub Pages
 
 on:
   workflow_dispatch:
