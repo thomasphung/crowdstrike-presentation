@@ -63,15 +63,64 @@ According to CrowdStrike, around 11 days after the incident ~99% of affected mac
 On Tuesday August 6th, 19 days after the incident, Crowdstrike released the results of their investigation and identified multiple failures in their software development and deployment processes that compounded into this mess.
 :::
 
-## The Culprit
+## The Culprit(s)
 
 > "CrowdStrike was founded with a mission to protect customers against today’s adversaries and stop breaches. On July 19, 2024, as part of regular operations, <span class="highlight">CrowdStrike released a content configuration update (via channel files) for the Windows sensor that resulted in a system crash.</span> We apologize unreservedly."
 
 ::: {.notes}
-In their "Channel File 291 RCA Exec Summary", CrowdStrike mentioned they pushed a faulty update to a configuration file (a channel file) of one of their software agents (Windows Falcon sensor).
+In their Root Cause Analysis document, CrowdStrike mentioned they pushed a faulty update to a configuration file (a channel file) of one of their software agents (Windows Falcon sensor).
 
 This error was not flagged by their automated unit testing and integration tests and was deployed to all Windows machines who had CrowdStrike's Falcon software installed.
 :::
+
+## The Culprit - Out of Bounds Error
+
+- Update to configuration file contained an additional input (21 elements)
+- Someone in agent's code, they were hard-coding an array access to the 21st element when the configuration file omitted it
+- Classic out of bounds read issue ([CWE-125](https://cwe.mitre.org/data/definitions/125.html))
+- Top 25 software vulnerabilities according to Common Weakness Enumeration (CWE)
+
+![Out of bounds read diagram from MITRE](cwe-125-diagram.png)
+
+## The Culprit - Out of Bounds Error Fix
+
+- One if statement protects against this; do input validation
+
+```C
+int getValueFromArray(int *array, int len, int index) {
+
+    int value;
+
+    // check that the array index is less than the maximum
+
+    // check that the array index is within the correct
+    // range of values for the array
+    if (index >= 0 && index < len) {
+        
+        // get the value at the specified index of the array
+        value = array[index];
+    }
+    // if array index is invalid then output error message
+
+    // and return value indicating error
+    else {
+        printf("Value is: %d\n", array[index]);
+        value = -1;
+    }
+
+    return value;
+}
+```
+
+::: {.notes}
+Sample solution from CWE, written in C language (https://cwe.mitre.org/data/definitions/125.html). Very simple fix, but it's scary to know that this amateur error can happen to such a large organization like CrowdStrike. This demonstrates no matter who you are security vulnerabilities can creep into your product.
+:::
+
+## The Culprit - Oversight In Testing
+
+- No known integration test to catch this issue.
+    - Pushing your changes to a local Windows machine and turning it on-and-off would catch this bug.
+- Usage of catch-all RegEx in tests to pass them
 
 ## Not An Isolated Issue
 
