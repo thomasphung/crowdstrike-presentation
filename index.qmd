@@ -8,6 +8,8 @@ format:
         chalkboard: true
         code-line-numbers: false
         preview-links: auto
+title-slide-attributes:
+  data-background-image: crowdstrike-meme-stickers.jpg
 author: "Thomas Phung"
 date: 08/21/2024 #Date in US format... MM/DD/YYYY
 date-format: "ddd Do MMMM YYYY"
@@ -18,28 +20,48 @@ from: markdown+emoji
 ## The Who, The What, and The Where
 
 - CrowdStrike offers a platform, "Falcon", that acts as a single pane of glass in monitoring of cybersecurity threats
-- Faulty update to one of Falcon software agents caused system outages
-- ~8.5 million Windows machines affected worldwide
+- Faulty configuration file update to one of Falcon software agents caused system outages
+- ~8.5 million Windows machines affected worldwide (<1% of all Windows machines)
+- Emergency response affected, rely on pen-and-paper or backup system; luckily no reported fatalities
 
 ::: {.notes}
-CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, etc. Can think of it like a glorified antivirus.
+CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, etc. Can think of it like a glorified antivirus for large organizations.
 
-They have their hands in a lot of market sectors from healthcare, public utilities, transportation, finance so they are considered as industry leaders in the security sector. 
+They have their hands in a lot of market sectors from healthcare, public utilities, transportation, finance so they are considered as industry leaders in the security sector.
 
-If you are not in the cyber space, then you probably haven't heard about this company until last month when 8.5 million Windows computers around the world experienced the blue screen of death, causing system outages and delays.
+If you are not in the cyber space or work in IT, then you probably haven't heard about this company until last month when 8.5 million Windows computers around the world experienced the blue screen of death, causing system outages and delays.
 :::
 
 ## {background-image="blue-screen-of-death.jpg"}
 
 ## Timeline
+Conversions: Eastern Time (UTC-4), Central (UTC-5), Mountain (UTC-6), Pacific (UTC-7)
 
-- July 19th, 2024 04:09 UTC - Configuration file update first distributed
+- July 19, 2024 (Friday)
+    - 04:09 UTC - Configuration file update first distributed
+    - 06:27 UTC - Update reverted and fix distributed
+    - System outages throughout the day and over weekend due to manual fixes
+- July 24, 2024 (4 days post-incident)
+    - 03:35 UTC - Preliminary [Post Incident Review](https://www.crowdstrike.com/wp-content/uploads/2024/07/CrowdStrike-PIR-Executive-Summary.pdf) published
+- July 25, 2024 (5 days post-incident)
+    - 0:00 UTC - ~97% of Windows CrowdStrike Falcon agents back online
+- July 30, 2024 (11 days post-incident)
+    - 0:00 UTC - ~99% of Windows CrowdStrike Falcon agents back online
+- August 6, 2024 (19 days post-incident)
+    - 16:00 UTC - [Root Cause Analysis](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf) published
 
 ::: {.notes}
-So what happened is that on July 19th, CrowdStrike deployed an update 
+So what happened is that on Friday July 19th, CrowdStrike deployed an update to a configuration file that caused one of their software agent to crash out. Because their agent operates on the kernel level, once a machine downloads the faulty update and restarts, the OS cannot boot and results in a blue screen of death. Even though CrowdStrike deployed a bugfix remotely 2 hours after the incident, affected machines were stuck in a bootloop and thus cannot download the fix.
+
+According to CrowdStrike, around 11 days after the incident ~99% of affected machines were back online. That still means ~85,000 machines are still affected by this issue.
 :::
 
 ## Root Cause Analysis Report
+[![External Technical Root Cause Analysis — Channel File 291](crowdstrike-root-cause-analysis.jpg)](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf)
+
+::: {.notes}
+On Tuesday August 6th, 19 days after the incident, Crowdstrike released the results of their investigation and identified multiple failures in their software development and deployment processes that compounded into this mess.
+:::
 
 ## The Culprit
 
@@ -58,13 +80,7 @@ This error was not flagged by their automated unit testing and integration tests
 ```
 
 ::: {.notes}
-Unfortunately this is not the year of the Linux desktop. There was a Linux kernel bug that caused an issue with CrowdStrike's products.
-:::
-
-## Fallout?
-
-::: {.notes}
-
+Unfortunately this is not the year of the Linux desktop. Earlier this year, there was a Linux kernel bug that caused an issue with CrowdStrike's Falcon software. Want to highlight that security issues can happen on any operating system which is why we have security teams.
 :::
 
 ## My Takeaways
@@ -80,7 +96,7 @@ Security is two-part mitigation and remediation. 1. Reduce risk and 2. Bounce ba
 :::
 
 ::: {.fragment}
-- Trust, but verify; be friends with your security team/office
+- Transparency: Trust, but verify; be friends with your security team/office
 :::
 
 ::: {.fragment}
@@ -92,20 +108,20 @@ Security is two-part mitigation and remediation. 1. Reduce risk and 2. Bounce ba
 :::
 
 ::: {.fragment}
-- Have a backup plan; do regular tabletop exercises:
+- Have a backup plan; understand your tech footprint; do regular tabletop exercises:
     - https://www.cisa.gov/resources-tools/services/cisa-tabletop-exercise-packages
     - https://owasp.org/www-project-cornucopia/
 :::
 
 ::: {.notes}
-So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike vulnerable to insider threats? You hear all the hype around implementing AI into products and even CrowdStrike is advertising themselves as the "future of AI-powered cybersecurity". Implementing AI and other emergent technologies mean little you don't have the foundations in place. In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable, but you can take steps to reduce risk of incidents through prevention and have practices to recovery from said incidents through response.
+So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike a single point of failure for a lot of organizations? You hear all the hype around implementing AI into products and even CrowdStrike is advertising themselves as the "future of AI-powered cybersecurity". Implementing AI and other emergent technologies mean little you don't have the foundations in place. In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable, but you can take steps to reduce risk of incidents through prevention and have practices to recover from said incidents through response.
 
 - No matter who you are on a project, please embed the culture of not deploying to your production environment on a Friday. In the event where something goes wrong, your Operations team should immediately be available, monitor the situation, and take the necessary steps to remediate.
-- Have healthy paranoia and skepticism around your security posture and ask questions to verify them. I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and causing harm to lives.
+- Have healthy paranoia and skepticism around your security posture and ask questions to verify them. I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and causing harm to lives. Don't have a single point of failure.
 - Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, should be a collaborative relationship.
 - Have a robust testing suite but don't limit it to business logic. Nowadays, "everything as code" which opens the attack surface but also enables automation. So perform automated testing and scans as part of your CI/CD on infrastructure as code files, secrets data store, environment variable files, etc.
-- If you are developing a platform that is deployed remotely to customers, please do staggered deployments so you can monitor your changes' effect in production workloads and do rollbacks.
-- I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pidegonhole in boost business value (move fast and break things) but don't invest in practices or talent in cybersecurity. Don't make security an afterthought. Integrate them from the beginning and throughout a project lifecycle. You can do this even if you are not a security person. There are tabletop exercises that you can involve your product people, developers, testers, security, operations, leadership, etc. to help devise plans and start thinking about security.
+- If you are developing a platform that is deployed remotely to customers, please do staggered deployments so you can monitor your changes' effect in production workloads and do rollbacks before crashes affect everyone.
+- I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pidegonhole themselves into boosting business/operational value (move fast and break things) and don't invest in cybersecurity practices or talent. Don't make security an afterthought. Integrate them from the beginning and throughout a project lifecycle. You can do this even if you are not a security person. There are tabletop exercises that you can involve your product people, developers, testers, security, operations, leadership, etc. to help devise plans and start thinking about security.
 :::
 
 ## Sources and References
@@ -113,5 +129,6 @@ Presentation made in [Quarto](https://quarto.org/).
 
 - https://en.wikipedia.org/wiki/CrowdStrike
 - https://en.wikipedia.org/wiki/2024_CrowdStrike_incident
+- https://www.crowdstrike.com/blog/to-our-customers-and-partners/
 - https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/
 - https://www.crowdstrike.com/blog/falcon-content-update-preliminary-post-incident-report/
