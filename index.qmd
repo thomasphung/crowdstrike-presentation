@@ -28,14 +28,14 @@ from: markdown+emoji
 
 ::: {.notes}
 (40 seconds)
-CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, and more. Can think of it like a glorified antivirus for large organizations.
+CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, and more. Can think of it like a glorified antivirus for large organizations who have access to many machines and thus have many network connections they want to monitor in a centralized way.
 
 If you are not familiar with this space (like me), then you probably haven't heard about CrowdStrike until last month when 8.5 million Windows machine worldwide experienced the blue screen of death, causing system outages and service disruption.
 :::
 
 ## BSOD
 
-![](assets\images\blue-screen-of-death.jpg)
+![](assets/images/blue-screen-of-death.jpg)
 
 ::: {.notes}
 (20 seconds)
@@ -45,7 +45,7 @@ Luckily there was no reported casualties and organizations resolved this situati
 ## Timeline {.scrollable}
 Conversions: Eastern Time (UTC-4), Central (UTC-5), Mountain (UTC-6), Pacific (UTC-7)
 
-<!--
+<!-- Markdown table doesn't support individual cell styling
 | Sun | Mon | Tue | Wed | Thu | Fri | Sat |
 |-----|-----|-----|-----|-----|-----|-----|
 |     |     |     |     |     |     | 13  |
@@ -54,15 +54,64 @@ Conversions: Eastern Time (UTC-4), Central (UTC-5), Mountain (UTC-6), Pacific (U
 | 28  | 29  | 30  | 31  |     |     |     |
 -->
 
+<!-- <table style="width: 100%; table-layout: fixed;">
+    <th colspan="7">July 2024</th>
+    <tr>
+        <th>Sun</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>13</td>
+    </tr>
+    <tr>
+        <td>14</td>
+        <td>15</td>
+        <td>16</td>
+        <td>17</td>
+        <td>18</td>
+        <td style="background-color: yellow;">19</td>
+        <td style="background-color: yellow;">20</td>
+    </tr>
+    <tr>
+        <td style="background-color: yellow;">21</td>
+        <td style="background-color: yellow;">22</td>
+        <td style="background-color: yellow;">23</td>
+        <td style="background-color: yellow;">24</td>
+        <td style="background-color: yellow;">25</td>
+        <td style="background-color: yellow;">26</td>
+        <td style="background-color: yellow;">27</td>
+    </tr>
+    <tr>
+        <td style="background-color: yellow;">28</td>
+        <td style="background-color: yellow;">29</td>
+        <td style="background-color: yellow;">30</td>
+        <td style="background-color: yellow;">31</td>
+        <td style="background-color: yellow;">1</td>
+        <td style="background-color: yellow;">2</td>
+        <td>3</td>
+    </tr>
+</table> -->
+
 - July 19 (Friday)
     - 04:09 UTC - Configuration file update first distributed
     - 06:27 UTC - Update reverted and fix distributed
     - System outages throughout the day and over weekend due to manual fixes
 - July 20
     - 23:37 UTC - Microsoft released a [recovery tool for encrypted machines](https://techcommunity.microsoft.com/t5/intune-customer-success/new-recovery-tool-to-help-with-crowdstrike-issue-impacting/ba-p/4196959)
-- July 24 (4 days post-incident)
+- July 24 (5 days post-incident)
     - 03:35 UTC - CrowdStrike published Preliminary [Post Incident Review](https://www.crowdstrike.com/wp-content/uploads/2024/07/CrowdStrike-PIR-Executive-Summary.pdf)
-- July 25 (5 days post-incident)
+- July 25 (6 days post-incident)
     - 0:00 UTC - ~97% of Windows CrowdStrike Falcon agents back online
 - July 27
     - 22:24 UTC - Microsoft published an [article using crash dumps to diagnose CrowdStrike issue](https://www.microsoft.com/en-us/security/blog/2024/07/27/windows-security-best-practices-for-integrating-and-managing-security-tools/)
@@ -72,14 +121,23 @@ Conversions: Eastern Time (UTC-4), Central (UTC-5), Mountain (UTC-6), Pacific (U
     - 16:00 UTC - CrowdStrike published [Root Cause Analysis](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf)
 
 ::: {.notes}
-(1 minute)
-On Friday July 19th, CrowdStrike deployed an update to a configuration file that caused one of their software agents to crash out. Because their agent operates on the kernel level, once a machine downloads the faulty update and restarts, the OS loads the offending file, machine cannot boot, and blue screens. Even though CrowdStrike deployed a bugfix remotely 2 hours after the incident, affected machines were stuck in a bootloop and thus cannot download the fix, requiring manual intervention (boot into Safe Mode, delete offending file, and restart).
-
-According to CrowdStrike, around 11 days after the incident, ~99% of affected machines were back online. Though that is still ~85,000 machines left. But that number should be near zero as of today (hopefully).
+(10 seconds)
+Comprehensive timeline for you all to scroll through if you want. Interesting readings linked.
 :::
 
-## Root Cause Analysis Report
-[![Figure 1: External Technical Root Cause Analysis — Channel File 291](assets\images\crowdstrike-root-cause-analysis.jpg)](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf)
+## The Situation {.scrollable}
+
+![Figure 1: CrowdStrike incident](assets/images/crowdstrike-incident-diagram.drawio.svg)
+
+::: {.notes}
+(1 minute)
+On Friday July 19th, CrowdStrike deployed an update to a configuration file that caused one of their software agents to crash out. Because their agent operates on the kernel level, once a machine downloads the faulty update, the OS loads the offending file, CrowdStrike's software reads it, encounters an unhandled error, Windows doesn't know what to do (it can't just terminate the software because the software itself is running with elevated privileges), and blue screens. Even though CrowdStrike deployed a bugfix remotely 2 hours after the incident, affected machines were stuck in a bootloop and thus cannot download the fix, requiring manual intervention (boot into Safe Mode, delete offending file, and restart).
+
+According to CrowdStrike, around 11 days after the incident on July 30th, ~99% of affected machines were back online. Though that is still ~85,000 machines left. But that number should be near zero as of today (hopefully). It's a testament to how hard IT workers worldwide were working to remediate this issue. But also how lucky we are that this was not a cyberattack from a malicious actor.
+:::
+
+## Root Cause Analysis Report {.scrollable}
+[![Figure 2: External Technical Root Cause Analysis — Channel File 291](assets/images/crowdstrike-root-cause-analysis.jpg)](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf)
 
 ::: {.notes}
 (20 seconds)
@@ -88,7 +146,7 @@ On Tuesday August 6th, 19 days after the incident, Crowdstrike released a 12-pag
 
 ## The Culprit(s) {.smaller}
 
-::: {.fragment .semi-fade-out} 
+::: {.fragment .semi-fade-out}
 > "The <span class="highlight">new IPC Template Type defined 21 input parameter fields</span>, but the integration code that invoked the Content Interpreter with <span class="highlight">Channel File 291’s Template Instances supplied only 20 input values</span> to match against. <span class="highlight">This parameter count mismatch evaded multiple layers of build validation and testing</span>, as it was not discovered during the sensor release testing process, the Template Type (using a test Template Instance) stress testing or the first several successful deployments of IPC Template Instances in the field. In part, this was due to the use of wildcard matching criteria for the 21st input during testing and in the initial IPC Template Instances."
 :::
 
@@ -112,7 +170,7 @@ This error was not flagged by their automated unit testing and integration tests
 - Classic out of bounds read issue ([CWE-125](https://cwe.mitre.org/data/definitions/125.html))
     - Top 25 software vulnerabilities according to Common Weakness Enumeration (CWE)
 
-![Figure 2: Out of bounds read diagram from MITRE](assets\images\cwe-125-diagram.png)
+![Figure 3: Out of bounds read diagram from MITRE](assets/images/cwe-125-diagram.png)
 
 ::: {.notes}
 (30 seconds)
@@ -207,13 +265,11 @@ Very simple fix to make secure code by adding a few lines to check you don't go 
 - No known integration test to catch this issue.
     - Pushing changes to a local Windows machine and turning it on-and-off would likely catch this bug.
 
-```C
-TODO: Add sample code
-```
-
 ::: {.notes}
 (1 minute)
-But CrowdStrike's tests failed to catch this insecure code. Their config file validation code also failed to do input validation. Their tests do not match their production environment.
+But CrowdStrike's tests failed to catch this insecure code. Their config file validation code also failed to do input validation because they used a wildcard pattern in their RegEx parser and accepts any number of inputs. Their tests do not match their production environment. They were using an older version of their config file with 20 inputs in production when their code expects 21 inputs.
+
+Their developers also didn't do proper integration testing. If they deployed the updated config file in a local environment, mimicking what a customer experiences when they recieve the new update, they could have caught the blue screen of death before 8.5 million machines went down.
 :::
 
 ## Not An Isolated Issue
@@ -225,7 +281,7 @@ But CrowdStrike's tests failed to catch this insecure code. Their config file va
 
 ::: {.notes}
 (30 seconds)
-Unfortunately this is not the year of the Linux desktop. Earlier this year, there was a Linux kernel bug that caused an issue with CrowdStrike's Falcon software that fell under the media's radar. Though not necessarily CrowdStrike's fault, I want to highlight that security issues can happen on any operating system.
+Unfortunately this is not the year of the Linux desktop. Earlier this year, there was a Linux kernel bug that caused an issue with CrowdStrike's Falcon software that fell under the media's radar. Though not necessarily CrowdStrike's fault, I want to highlight that security issues can happen on any operating system, especially if it runs kernel-level software.
 :::
 
 ## My Takeaways
@@ -277,13 +333,11 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 - Repeat after me: No Deploy Fridays. In the event where something goes wrong, your Operations team should be immediately available, monitor the situation, and take the necessary steps to remediate.
 - Security is everyone's responsibility. Have healthy paranoia and skepticism around your security posture and ask questions to verify stuff like "what are our single points of failure?" and "what is our SOP in an emergency". I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and harming lives.
 - Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. It should also be your responsibilty. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, foster a collaborative relationship to ensure everyone is safe.
-:::
 
-::: {.notes}
 (2.5 minutes)
 
 - Have a robust testing suite but don't limit it to testing business logic. Nowadays, "everything as code" which enables automation but opens the attack surface. So perform automated testing and scans as part of your CI/CD on infrastructure as code files, secrets data store, environment variable files, etc. And make sure your tests have full coverage.
-- If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads and do rollbacks before crashes, security vulnerabilities, etc. affect everyone.
+- If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads and do rollbacks before crashes, security vulnerabilities, etc. affect everyone. Have a small percentage of your userbase recieve the latest changes and monitor for any issues.
 - I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pidegonhole themselves into boosting business/operational value (move fast and break things) but please slow down and invest in cybersecurity practices or talent. Don't make security an afterthought. If you have trouble justifying others the importance of security, frame the conversation around risk management and point to CrowdStrike as a case study.
 - Integrate security from the beginning and throughout a project lifecycle. You can do this even if you are not a security person. There are tabletop exercises that you can involve your product people, developers, testers, security, operations, leadership, etc. to help devise plans and start thinking about security.
     - I don't expect everyone to be perfect. We all make mistakes. But there should be processes in place to catch these mistakes before they blow up into something big. And in the very rare instance that big thing happens, give out $10 gift cards to add salt to injury. /s
@@ -301,7 +355,7 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 
 ## A $10 Apology
 
-![Figure 3: Tweet on CrowdStrike apology email to partners](assets\images\crowdstrike-partner-apology-email.png)
+![Figure 4: Tweet on CrowdStrike apology email to partners](assets/images/crowdstrike-partner-apology-email.png)
 
 ## Sources and References {.smaller}
 Presentation made in [Quarto](https://quarto.org/) and rendered using [reveal.js](https://github.com/hakimel/reveal.js).
