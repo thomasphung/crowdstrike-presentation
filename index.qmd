@@ -127,7 +127,7 @@ Comprehensive timeline for you all to scroll through if you want. Interesting re
 
 ## The Situation {.scrollable}
 
-![Figure 1: CrowdStrike incident](assets/images/crowdstrike-incident-diagram.drawio.svg)
+![Figure 1: CrowdStrike incident, showing interaction with CrowdStrike and remote Windows machines that use CrowdStrike's products](assets/images/crowdstrike-incident-diagram.drawio.svg)
 
 ::: {.notes}
 (1 minute)
