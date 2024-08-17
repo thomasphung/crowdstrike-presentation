@@ -1,4 +1,19 @@
+/* TODO: How to override reveal.js CSS variables? */
+:root {
+    --r-link-color: #0800ff;
+    --r-link-color-hover: #a2dffb;
+}
+
 .highlight {
     background-color: yellow;
     padding: 2px;
+}
+
+table td {
+    border: 1px solid #000000;
+}
+
+a[href="^https://"] {
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
 }
