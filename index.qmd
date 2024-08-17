@@ -33,7 +33,9 @@ CrowdStrike is a cybersecurity company that provides security products to Fortun
 If you are not familiar with this space (like me), then you probably haven't heard about CrowdStrike until last month when 8.5 million Windows machine worldwide experienced the blue screen of death, causing system outages and service disruption.
 :::
 
-## {background-image="assets\images\blue-screen-of-death.jpg"}
+## BSOD
+
+![](assets\images\blue-screen-of-death.jpg)
 
 ::: {.notes}
 (20 seconds)
@@ -117,14 +119,8 @@ This error was not flagged by their automated unit testing and integration tests
 This faulty update caused a classic out of bounds error where somewhere in their software, they were hard-coding access to a 21st element that was missing from a config file. In other words, they were asking for information that doesn't exist and they didn't properly handle that error. As a last resort, Windows gives you the blue screen.
 :::
 
-## The Culprit - Out of Bounds Error Fix {.smaller}
+## The Culprit - Out of Bounds Error
 
-Example from CWE ([https://cwe.mitre.org/data/definitions/125.html](https://cwe.mitre.org/data/definitions/125.html)):
-
-:::: {.columns}
-
-::: {.column width="50%"}
-Insecure code:
 ```C
 int getValueFromArray(int *array, int length, int index) {
 
@@ -136,10 +132,16 @@ int getValueFromArray(int *array, int length, int index) {
     return value;
 }
 ```
+
+::: {.notes}
+(15 seconds)
+Example from CWE ([https://cwe.mitre.org/data/definitions/125.html](https://cwe.mitre.org/data/definitions/125.html))
+
+Sample solution from Common Weakness Enumeration, written in C language. For some reason, Crowdstrike devs didn't do input validation to prevent getting data beyond what's available.
 :::
 
-::: {.column width="50%"}
-More secure code:
+## The Culprit - Out of Bounds Error
+
 ```C
 int getValueFromArray(int *array, int length, int index) {
 
@@ -162,21 +164,48 @@ int getValueFromArray(int *array, int length, int index) {
     return value;
 }
 ```
-:::
-
-::::
 
 ::: {.notes}
-(30 seconds)
-Sample solution from Common Weakness Enumeration, written in C language. For some reason, Crowdstrike devs didn't do input validation to prevent getting data beyond what's available. Very simple fix to make secure code, but it's scary to know that this amateur error can happen to such a large organization like CrowdStrike. This demonstrates no matter who you are, security vulnerabilities can creep into your product. This is why you have robust test coverage.
+(15 seconds)
+Very simple fix to make secure code by adding a few lines to check you don't go out of bounds. But it's scary to know that this amateur error can happen to such a large organization like CrowdStrike. This demonstrates no matter who you are, security vulnerabilities can creep into your product. This is why you have robust test coverage.
+:::
+
+## The Culprit - Out of Bounds Error
+
+```{.c code-line-numbers="7-11"}
+int getValueFromArray(int *array, int length, int index) {
+
+    int value;
+
+    // check that the array index is within the correct
+    // range of values for the array
+    if (index >= 0 && index < length) {
+        
+        // get the value at the specified index of the array
+        value = array[index];
+    }
+    // if array index is invalid then output error message
+    // and return value indicating error
+    else {
+        printf("Value is: %d\n", array[index]);
+        value = -1;
+    }
+
+    return value;
+}
+```
+
+::: {.notes}
+(15 seconds)
+Very simple fix to make secure code by adding a few lines to check you don't go out of bounds. But it's scary to know that this amateur error can happen to such a large organization like CrowdStrike. This demonstrates no matter who you are, security vulnerabilities can creep into your product. This is why you have robust test coverage.
 :::
 
 ## The Culprit - Oversight In Testing {.smaller}
 
-- Usage of catch-all wildcard pattern in RegEx in tests to pass faulty configuration file.
-    - Inconsistency between mock config files passed to validation code vs. actual config files used in production
+- Usage of catch-all wildcard pattern in RegEx in validation code failed to validate.
+    - Inconsistency between mock config files passed to validation code vs. actual config files used in production.
 - No known integration test to catch this issue.
-    - Pushing your changes to a local Windows machine and turning it on-and-off would likely catch this bug.
+    - Pushing changes to a local Windows machine and turning it on-and-off would likely catch this bug.
 
 ```C
 TODO: Add sample code
@@ -191,9 +220,7 @@ But CrowdStrike's tests failed to catch this insecure code. Their config file va
 
 ```{=html}
 <iframe width="780" height="500" src="https://www.theregister.com/2024/07/21/crowdstrike_linux_crashes_restoration_tools/" title="CrowdStrike's Falcon Sensor also linked to Linux kernel panics and crashes"></iframe>
-<!--
-<iframe width="780" height="500" src="https://www.neowin.net/news/crowdstrike-broke-debian-and-rocky-linux-months-ago-but-no-one-noticed/" title="CrowdStrike broke Debian and Rocky Linux months ago, but no one noticed"></iframe>
--->
+<!-- <iframe width="780" height="500" src="https://www.neowin.net/news/crowdstrike-broke-debian-and-rocky-linux-months-ago-but-no-one-noticed/" title="CrowdStrike broke Debian and Rocky Linux months ago, but no one noticed"></iframe> -->
 ```
 
 ::: {.notes}
@@ -201,9 +228,18 @@ But CrowdStrike's tests failed to catch this insecure code. Their config file va
 Unfortunately this is not the year of the Linux desktop. Earlier this year, there was a Linux kernel bug that caused an issue with CrowdStrike's Falcon software that fell under the media's radar. Though not necessarily CrowdStrike's fault, I want to highlight that security issues can happen on any operating system.
 :::
 
-## My Takeaways {.scrollable .smaller}
-Security is two-part mitigation and remediation. 1. Reduce risk and 2. Bounce back from an unlikely incident.
+## My Takeaways
+Security is two-part mitigation and remediation.
 
+1. Reduce risk
+2. Bounce back from an unlikely incident
+
+::: {.notes}
+(20 seconds)
+So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike a single point of failure for a lot of organizations? In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable, but you can reduce risk of incidents through prevention steps and recover through remediation practices.
+:::
+
+## My Takeaways {.scrollable .smaller}
 <!-- In increasing order of complexity to implement -->
 ::: {.fragment}
 - No Deploy Fridays
@@ -222,7 +258,7 @@ Security is two-part mitigation and remediation. 1. Reduce risk and 2. Bounce ba
 :::
 
 ::: {.fragment}
-- Staggered deployments if you do remote updates
+- Staggered deployments/canary releases if you do remote updates
 :::
 
 ::: {.fragment}
@@ -237,15 +273,15 @@ Security is two-part mitigation and remediation. 1. Reduce risk and 2. Bounce ba
 
 ::: {.notes}
 (2.5 minutes)
-So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike a single point of failure for a lot of organizations? In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable, but you can reduce risk of incidents through prevention steps and recover through remediation practices.
 
-- No matter who you are on a project, please embed the culture of not deploying to your production environment on a Friday. In the event where something goes wrong, your Operations team should be immediately available, monitor the situation, and take the necessary steps to remediate.
+- Repeat after me: No Deploy Fridays. In the event where something goes wrong, your Operations team should be immediately available, monitor the situation, and take the necessary steps to remediate.
 - Security is everyone's responsibility. Have healthy paranoia and skepticism around your security posture and ask questions to verify stuff like "what are our single points of failure?" and "what is our SOP in an emergency". I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and harming lives.
 - Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. It should also be your responsibilty. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, foster a collaborative relationship to ensure everyone is safe.
 :::
 
 ::: {.notes}
 (2.5 minutes)
+
 - Have a robust testing suite but don't limit it to testing business logic. Nowadays, "everything as code" which enables automation but opens the attack surface. So perform automated testing and scans as part of your CI/CD on infrastructure as code files, secrets data store, environment variable files, etc. And make sure your tests have full coverage.
 - If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads and do rollbacks before crashes, security vulnerabilities, etc. affect everyone.
 - I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pidegonhole themselves into boosting business/operational value (move fast and break things) but please slow down and invest in cybersecurity practices or talent. Don't make security an afterthought. If you have trouble justifying others the importance of security, frame the conversation around risk management and point to CrowdStrike as a case study.
@@ -256,13 +292,21 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 ## A $10 Apology
 
 ```{=html}
-<iframe width="780" height="500" src="https://techcrunch.com/2024/07/24/crowdstrike-offers-a-10-apology-gift-card-to-say-sorry-for-outage/" title="CrowdStrike offers a $10 apology gift card to say sorry for outage"></iframe>
+<!-- <iframe width="780" height="500" src="https://techcrunch.com/2024/07/24/crowdstrike-offers-a-10-apology-gift-card-to-say-sorry-for-outage/" title="CrowdStrike offers a $10 apology gift card to say sorry for outage"></iframe> -->
+<!-- <iframe width="780" height="500" src="https://www.independent.co.uk/tech/crowdstrike-outage-compensation-gift-card-b2585641.html" title="CrowdStrike offers $10 gift card apology for $5bn outage"></iframe> -->
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">lol Crowdstrike crashed millions of computers with a glitch and then sent an apology to partners in the form of a $10 Uber Eats gift card <a href="https://t.co/6ZaYdf1TS6">pic.twitter.com/6ZaYdf1TS6</a></p>&mdash; Sheel Mohnot (@pitdesi) <a href="https://twitter.com/pitdesi/status/1816142541089300536?ref_src=twsrc%5Etfw">July 24, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
 ```
 
-## Sources and References
-Presentation made in [Quarto](https://quarto.org/).
+---
 
-- [ttps://en.wikipedia.org/wiki/CrowdStrike](https://en.wikipedia.org/wiki/CrowdStrike)
+## A $10 Apology
+
+![Figure 3: Tweet on CrowdStrike apology email to partners](assets\images\crowdstrike-partner-apology-email.png)
+
+## Sources and References {.smaller}
+Presentation made in [Quarto](https://quarto.org/) and rendered using [reveal.js](https://github.com/hakimel/reveal.js).
+
+- [https://en.wikipedia.org/wiki/CrowdStrike](https://en.wikipedia.org/wiki/CrowdStrike)
 - [https://en.wikipedia.org/wiki/2024_CrowdStrike_incident](https://en.wikipedia.org/wiki/2024_CrowdStrike_incident)
 - [https://www.crowdstrike.com/blog/to-our-customers-and-partners/](https://www.crowdstrike.com/blog/to-our-customers-and-partners/)
 - [https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/)
