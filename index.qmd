@@ -30,7 +30,7 @@ from: markdown+emoji
 (40 seconds)
 CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, and more. Can think of it like a glorified antivirus for large organizations who have access to many machines and thus have many network connections they want to monitor in a centralized way.
 
-If you are not familiar with this space (like me), then you probably haven't heard about CrowdStrike until last month when 8.5 million Windows machine worldwide experienced the blue screen of death, causing system outages and service disruption.
+If you are not familiar with this space (like me), then you probably haven't heard about CrowdStrike until last month when 8.5 million Windows machines worldwide experienced the blue screen of death, causing system outages and service disruption.
 :::
 
 ## BSOD
@@ -131,7 +131,7 @@ Comprehensive timeline for you all to scroll through if you want. Interesting re
 
 ::: {.notes}
 (1 minute)
-On Friday July 19th, CrowdStrike deployed an update to a configuration file that caused one of their software agents to crash out. Because their agent operates on the kernel level, once a machine downloads the faulty update, the OS loads the offending file, CrowdStrike's software reads it, encounters an unhandled error, Windows doesn't know what to do (it can't just terminate the software because the software itself is running with elevated privileges), and blue screens. Even though CrowdStrike deployed a bugfix remotely 2 hours after the incident, affected machines were stuck in a bootloop and thus cannot download the fix, requiring manual intervention (boot into Safe Mode, delete offending file, and restart).
+On Friday July 19th, CrowdStrike deployed an update to a configuration file that caused one of their software agents to crash out. Because their agent operates on the kernel level, once a machine downloads the faulty update, the OS loads the offending file, CrowdStrike's software reads it, encounters an unhandled error, Windows doesn't know what to do (it can't just terminate the software because the software itself is running at an elevated privilege), and blue screens. Even though CrowdStrike deployed a bugfix remotely 2 hours after the incident, affected machines were stuck in a bootloop and thus cannot download the fix, requiring manual intervention (boot into Safe Mode, delete offending file, and restart).
 
 According to CrowdStrike, around 11 days after the incident on July 30th, ~99% of affected machines were back online. Though that is still ~85,000 machines left. But that number should be near zero as of today (hopefully). It's a testament to how hard IT workers worldwide were working to remediate this issue. But also how lucky we are that this was not a cyberattack from a malicious actor.
 :::
@@ -166,7 +166,7 @@ This error was not flagged by their automated unit testing and integration tests
 ## The Culprit - Out of Bounds Error {.smaller}
 
 - Update to configuration file template contained an additional input (21 elements)
-- Hard-coding an array access to the 21st element when the configuration file omitted it
+- Hard-coding an array access to the 21st element when an old configuration file had only 20 elements
 - Classic out of bounds read issue ([CWE-125](https://cwe.mitre.org/data/definitions/125.html))
     - Top 25 software vulnerabilities according to Common Weakness Enumeration (CWE)
 
@@ -292,7 +292,7 @@ Security is two-part mitigation and remediation.
 
 ::: {.notes}
 (20 seconds)
-So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike a single point of failure for a lot of organizations? In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable, but you can reduce risk of incidents through prevention steps and recover through remediation practices.
+So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike a single point of failure for a lot of organizations? In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable, but you can reduce risk of incidents through prevention steps and recover assets through remediation practices.
 :::
 
 ## My Takeaways {.scrollable .smaller}
@@ -337,7 +337,7 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 (2.5 minutes)
 
 - Have a robust testing suite but don't limit it to testing business logic. Nowadays, "everything as code" which enables automation but opens the attack surface. So perform automated testing and scans as part of your CI/CD on infrastructure as code files, secrets data store, environment variable files, etc. And make sure your tests have full coverage.
-- If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads and do rollbacks before crashes, security vulnerabilities, etc. affect everyone. Have a small percentage of your userbase recieve the latest changes and monitor for any issues.
+- If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads in small batches and do rollbacks before crashes, security vulnerabilities, etc. affect everyone. Have a small percentage of your userbase recieve the latest changes and monitor for any issues.
 - I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pidegonhole themselves into boosting business/operational value (move fast and break things) but please slow down and invest in cybersecurity practices or talent. Don't make security an afterthought. If you have trouble justifying others the importance of security, frame the conversation around risk management and point to CrowdStrike as a case study.
 - Integrate security from the beginning and throughout a project lifecycle. You can do this even if you are not a security person. There are tabletop exercises that you can involve your product people, developers, testers, security, operations, leadership, etc. to help devise plans and start thinking about security.
     - I don't expect everyone to be perfect. We all make mistakes. But there should be processes in place to catch these mistakes before they blow up into something big. And in the very rare instance that big thing happens, give out $10 gift cards to add salt to injury. /s
