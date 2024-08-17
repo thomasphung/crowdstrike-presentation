@@ -267,9 +267,9 @@ Very simple fix to make secure code by adding a few lines to check you don't go 
 
 ::: {.notes}
 (1 minute)
-But CrowdStrike's tests failed to catch this insecure code. Their config file validation code also failed to do input validation because they used a wildcard pattern in their RegEx parser and accepts any number of inputs. Their tests do not match their production environment. They were using an older version of their config file with 20 inputs in production when their code expects 21 inputs.
+But CrowdStrike's tests failed to catch this insecure code and inconsistent data. Their config file validation code was using RegEx! They used a wildcard pattern that accepts any number of inputs which is why when the updated the number of inputs in the config files, the tests still passed. But in their production environment, they were using an older version of their config file with 20 inputs when their code expects 21 inputs.
 
-Their developers also didn't do proper integration testing. If they deployed the updated config file in a local environment, mimicking what a customer experiences when they recieve the new update, they could have caught the blue screen of death before 8.5 million machines went down.
+In addition, their developers also didn't do proper integration testing. If they deployed the updated config file in a local environment, mimicking what a customer experiences when they recieve the new update, they could have caught the blue screen of death before 8.5 million machines went down.
 :::
 
 ## Not An Isolated Issue
