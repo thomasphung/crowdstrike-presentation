@@ -3,3 +3,4 @@ build/*
 /.quarto/
 *.html
 *_files/
+*.log
