@@ -22,6 +22,7 @@ Quarto documents can be rendered in either:
 Full instructions can be found at the link above, however in brief:
 * In RStudio, open `index.qmd`, above the document click `Render`
 * In the terminal, run `quarto render` to build the files, or `quarto preview` to spin up the preview server.
+	* E.g. to build HTML output: `quarto render index.qmd --to html`
 
 ## Enabling GitHub actions and GitHub Pages
 
