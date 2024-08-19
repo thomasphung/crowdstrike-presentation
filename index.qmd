@@ -8,8 +8,6 @@ format:
         chalkboard: true
         code-line-numbers: true
         preview-links: auto
-title-slide-attributes:
-  data-background-image: crowdstrike-meme-stickers.jpg
 author: "Thomas Phung"
 date: 08/21/2024 #Date in US format... MM/DD/YYYY
 date-format: "MMMM Do, YYYY"
@@ -294,7 +292,7 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 :::
 
 ## My Takeaways {.scrollable .smaller}
-<!-- In increasing order of complexity to implement -->
+
 ::: {.fragment}
 - No Deploy Fridays
 :::
@@ -317,6 +315,8 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 
 ::: {.fragment}
 - Have a backup plan; understand your tech footprint
+    - [Federal Information Security Modernization Act (FISMA)](https://csrc.nist.gov/projects/risk-management/fisma-background)
+    - [NIST Risk Management Framework](https://csrc.nist.gov/Projects/risk-management/about-rmf)
 :::
 
 ::: {.fragment}
@@ -327,7 +327,7 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 
 ::: {.notes}
 (2.5 minutes)
-
+In increasing order of complexity to implement:
 - Repeat after me: No Deploy Fridays. In the event where something goes wrong, your Operations team should be immediately available, monitor the situation, and take the necessary steps to remediate.
 - Security is everyone's responsibility. Have healthy paranoia and skepticism around your security posture and ask questions to verify stuff like "what are our single points of failure?" and "what is our SOP in an emergency". I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and harming lives.
 - Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. It should also be your responsibilty. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, foster a collaborative relationship to ensure everyone is safe.
