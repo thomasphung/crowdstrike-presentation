@@ -24,6 +24,7 @@ from: markdown+emoji
 
 ::: {.notes}
 (40 seconds + 20 second intro, 1:00)
+
 CrowdStrike is a cybersecurity company that provides security products to Fortune 500, governments, critical infrastructure, small businesses, and more. Can think of it like a glorified antivirus for large organizations who have access to many machines and thus have many network connections they want to monitor in a centralized way.
 
 If you are not familiar with this space (like me), then you probably haven't heard about CrowdStrike until last month when 8.5 million Windows machines worldwide experienced the blue screen of death, causing major system outages and service disruption.
@@ -35,6 +36,7 @@ If you are not familiar with this space (like me), then you probably haven't hea
 
 ::: {.notes}
 (20 seconds, 1:20)
+
 While luckily there were no reported casualties, organizations resolved this situation in a fairly short amount of time (in my opinion). So what happened?
 :::
 
@@ -44,6 +46,7 @@ While luckily there were no reported casualties, organizations resolved this sit
 
 ::: {.notes}
 (1 minute 20 seconds, 2:40)
+
 On Friday July 19th, CrowdStrike deployed an update to a configuration file that caused their Windows software agents to crash out (an agent is an autonomous program that observes and reacts to an event like a cyberthreat). Because their agent operates on the kernel level, when it encounters an unhandled error, Windows doesn't know what to do (it can't just terminate the software because the software itself is running at an elevated privilege) and blue screens. Even though CrowdStrike deployed a bugfix remotely 2 hours after the incident, affected machines were stuck in a bootloop and thus cannot download the fix, requiring manual intervention (boot into Safe Mode, delete offending file, and restart).
 
 And you can imagine if one machine with CrowdStrike is down, any machine that is talking to it over networks will also be affected, even if they don't have CrowdStrike. Which is why even though <1% of Windows machines were affected, it caused major disruptions.
@@ -129,6 +132,7 @@ Conversions: Eastern Time (UTC-4), Central (UTC-5), Mountain (UTC-6), Pacific (U
 
 ::: {.notes}
 (30 seconds, 3:10)
+
 According to CrowdStrike, around 11 days after the incident on July 30th, ~99% of affected machines were back online. Though that is still ~85,000 machines left. But that number should be near zero as of today (hopefully). It's a testament to how hard IT workers worldwide were working to remediate this issue. But also how lucky we are that this was not a cyberattack from a malicious actor which could have done much more damage such as deleting files or installing malware.
 
 Comprehensive timeline for you all to scroll through if you want. Interesting readings linked.
@@ -139,6 +143,7 @@ Comprehensive timeline for you all to scroll through if you want. Interesting re
 
 ::: {.notes}
 (20 seconds, 3:30)
+
 On Tuesday August 6th, 19 days after the incident, CrowdStrike released a 12-page report of their investigation and identified multiple failures in their software development and deployment practices that compounded into this mess.
 :::
 
@@ -156,6 +161,7 @@ In plain language (thanks Copilot):
 
 ::: {.notes}
 (30 seconds, 4:00)
+
 In their Root Cause Analysis document, there is a lot of jargon. TL;DR CrowdStrike pushed a faulty update to a config file of one of their software agents (Windows Falcon sensor). (Show example of Falcon sensor running in Task Manager)
 
 This error was not flagged by their automated and manual tests and was deployed to all 8.5 million Windows machines who had CrowdStrike's Falcon software installed.
@@ -182,6 +188,7 @@ Explanation of jargon used in the report:
 
 ::: {.notes}
 (45 seconds, 4:45)
+
 This faulty update caused a classic out of bounds error where somewhere in their software, they were hard-coding access to a 21st element that was missing from a config file. In other words, they were asking for information that doesn't exist and they didn't properly handle that error. As a last resort, Windows gives you the blue screen.
 :::
 
@@ -201,6 +208,7 @@ int getValueFromArray(int *array, int length, int index) {
 
 ::: {.notes}
 (15 seconds, 5:00)
+
 Example from CWE ([https://cwe.mitre.org/data/definitions/125.html](https://cwe.mitre.org/data/definitions/125.html))
 
 Sample solution from Common Weakness Enumeration, written in C language. For some reason, CrowdStrike developers didn't do input validation to prevent getting data beyond what's available.
@@ -262,6 +270,7 @@ int getValueFromArray(int *array, int length, int index) {
 
 ::: {.notes}
 (30 seconds, 5:30)
+
 Very simple fix to make secure code by adding a few lines to check you don't go out of bounds. But it's scary to know that this amateur error can happen to such a large organization like CrowdStrike with all their systems and processes in place. This demonstrates no matter who you are, security vulnerabilities can creep into your product. This is why you have robust test coverage for example.
 :::
 
@@ -274,6 +283,7 @@ Very simple fix to make secure code by adding a few lines to check you don't go 
 
 ::: {.notes}
 (1 minute, 6:30)
+
 But CrowdStrike's tests failed to catch this insecure code and inconsistent data. Their config file validation code was using RegEx! They used a wildcard pattern that accepts any number of inputs which is why when the updated the number of inputs in the config files, the tests still passed. But in their production environment, they were using an older version of their config file with 20 inputs when their new code expects 21 inputs.
 
 In addition, their developers also didn't do proper integration testing. If they deployed the updated config file in a local environment, mimicking what a customer experiences when they receive the new update, they could have caught the blue screen of death before 8.5 million machines went down.
@@ -288,6 +298,7 @@ In addition, their developers also didn't do proper integration testing. If they
 
 ::: {.notes}
 (45 seconds, 7:15)
+
 Unfortunately this is not the year of the Linux desktop. Earlier this year, there was a Linux kernel bug that caused an issue with CrowdStrike's Falcon software that fell under the media's radar. Though not necessarily CrowdStrike's fault, I want to highlight that security issues can happen on any operating system, especially if it runs kernel-level software. The July incident only happened because their update was deployed to Windows machines and not other operating systems.
 :::
 
@@ -299,6 +310,7 @@ Security is two-part mitigation and remediation.
 
 ::: {.notes}
 (45 seconds, 8:00)
+
 So I'm over here scratching my head and asking why is such a large and pervasive company like CrowdStrike a single point of failure for a lot of organizations? In the realm of security and cybersecurity, you are not too big to fail. Everyone is vulnerable in this interconnected world, but you can reduce risk of incidents through prevention steps and recover assets through remediation practices.
 :::
 
@@ -338,7 +350,9 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 
 ::: {.notes}
 (2.5 minutes, 10:30)
+
 In increasing order of complexity to implement:
+
 - Repeat after me: No Deploy Fridays. In the event where something goes wrong, your Operations team should be immediately available, monitor the situation, and take the necessary steps to remediate.
 - Security is everyone's responsibility. Have healthy paranoia and skepticism around your security posture and ask questions to verify stuff like "what are our single points of failure?" and "what is our SOP in an emergency". I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and harming lives.
 - Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. It should also be your responsibility. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, foster a collaborative relationship to ensure everyone is safe.
