@@ -167,6 +167,7 @@ In their Root Cause Analysis document, there is a lot of jargon. TL;DR CrowdStri
 This error was not flagged by their automated and manual tests and was deployed to all 8.5 million Windows machines who had CrowdStrike's Falcon software installed.
 
 Explanation of jargon used in the report:
+
 - CrowdStrike Falcon sensor = software used to monitor and respond to cyberthreats
 - Rapid Response Content = cyberthreat data that is provided to the Falcon sensor from CrowdStrike's remote servers (the cloud). These contain multiple Template Instances.
     - Template Instance = a RegEx pattern that matches known threats
