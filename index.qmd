@@ -357,7 +357,7 @@ In increasing order of complexity to implement:
 ```{=html}
 <!-- <iframe width="780" height="500" src="https://techcrunch.com/2024/07/24/crowdstrike-offers-a-10-apology-gift-card-to-say-sorry-for-outage/" title="CrowdStrike offers a $10 apology gift card to say sorry for outage"></iframe> -->
 <!-- <iframe width="780" height="500" src="https://www.independent.co.uk/tech/crowdstrike-outage-compensation-gift-card-b2585641.html" title="CrowdStrike offers $10 gift card apology for $5bn outage"></iframe> -->
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">lol Crowdstrike crashed millions of computers with a glitch and then sent an apology to partners in the form of a $10 Uber Eats gift card <a href="https://t.co/6ZaYdf1TS6">pic.twitter.com/6ZaYdf1TS6</a></p>&mdash; Sheel Mohnot (@pitdesi) <a href="https://twitter.com/pitdesi/status/1816142541089300536?ref_src=twsrc%5Etfw">July 24, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">lol Crowdstrike crashed millions of computers with a glitch and then sent an apology to partners in the form of a $10 Uber Eats gift card <a href="https://t.co/6ZaYdf1TS6">pic.twitter.com/6ZaYdf1TS6</a></p>&mdash; Sheel Mohnot (@pitdesi) <a href="https://twitter.com/pitdesi/status/1816142541089300536?ref_src=twsrc%5Etfw">July 24, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 ```
 
 ---
@@ -376,3 +376,7 @@ Presentation made in [Quarto](https://quarto.org/) and rendered using [reveal.js
 - [https://www.crowdstrike.com/blog/falcon-content-update-preliminary-post-incident-report/](https://www.crowdstrike.com/blog/falcon-content-update-preliminary-post-incident-report/)
 - [https://www.microsoft.com/en-us/security/blog/2024/07/27/windows-security-best-practices-for-integrating-and-managing-security-tools/](https://www.microsoft.com/en-us/security/blog/2024/07/27/windows-security-best-practices-for-integrating-and-managing-security-tools/)
 - [https://cwe.mitre.org/data/definitions/125.html](https://cwe.mitre.org/data/definitions/125.html)
+
+## 
+
+![](assets/images/crowdstrike-meme-stickers.jpg){fig-align="center"}
