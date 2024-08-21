@@ -139,7 +139,7 @@ Comprehensive timeline for you all to scroll through if you want. Interesting re
 
 ::: {.notes}
 (20 seconds, 3:30)
-On Tuesday August 6th, 19 days after the incident, Crowdstrike released a 12-page report of their investigation and identified multiple failures in their software development and deployment practices that compounded into this mess.
+On Tuesday August 6th, 19 days after the incident, CrowdStrike released a 12-page report of their investigation and identified multiple failures in their software development and deployment practices that compounded into this mess.
 :::
 
 ## The Culprit(s) {.smaller}
@@ -203,7 +203,7 @@ int getValueFromArray(int *array, int length, int index) {
 (15 seconds, 5:00)
 Example from CWE ([https://cwe.mitre.org/data/definitions/125.html](https://cwe.mitre.org/data/definitions/125.html))
 
-Sample solution from Common Weakness Enumeration, written in C language. For some reason, CrowdStrike devs didn't do input validation to prevent getting data beyond what's available.
+Sample solution from Common Weakness Enumeration, written in C language. For some reason, CrowdStrike developers didn't do input validation to prevent getting data beyond what's available.
 :::
 
 ## The Culprit - Out of Bounds Error
@@ -276,7 +276,7 @@ Very simple fix to make secure code by adding a few lines to check you don't go 
 (1 minute, 6:30)
 But CrowdStrike's tests failed to catch this insecure code and inconsistent data. Their config file validation code was using RegEx! They used a wildcard pattern that accepts any number of inputs which is why when the updated the number of inputs in the config files, the tests still passed. But in their production environment, they were using an older version of their config file with 20 inputs when their new code expects 21 inputs.
 
-In addition, their developers also didn't do proper integration testing. If they deployed the updated config file in a local environment, mimicking what a customer experiences when they recieve the new update, they could have caught the blue screen of death before 8.5 million machines went down.
+In addition, their developers also didn't do proper integration testing. If they deployed the updated config file in a local environment, mimicking what a customer experiences when they receive the new update, they could have caught the blue screen of death before 8.5 million machines went down.
 :::
 
 ## Not An Isolated Issue
@@ -341,13 +341,13 @@ So I'm over here scratching my head and asking why is such a large and pervasive
 In increasing order of complexity to implement:
 - Repeat after me: No Deploy Fridays. In the event where something goes wrong, your Operations team should be immediately available, monitor the situation, and take the necessary steps to remediate.
 - Security is everyone's responsibility. Have healthy paranoia and skepticism around your security posture and ask questions to verify stuff like "what are our single points of failure?" and "what is our SOP in an emergency". I wouldn't settle for less if there is critical infrastructure that is capable of disrupting and harming lives.
-- Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. It should also be your responsibilty. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, foster a collaborative relationship to ensure everyone is safe.
+- Trust, but verify. Don't solely rely on upstream dependencies for security practices or disaster recovery. It should also be your responsibility. Be friends with your security steward or security office to protect your products from others and yourself. Don't think of them as a blocker, foster a collaborative relationship to ensure everyone is safe.
 
 (4.5 minutes, 15:00)
 
 - Have a robust testing suite but don't limit it to testing business logic. Nowadays, "everything as code" which helps developers, operations, and infrastructure teams by enabling automation but it opens the attack surface to different types of threats. So perform automated testing and scans as part of your CI/CD on infrastructure as code files, secrets data store, environment variable files, data, etc. And make sure your tests have full coverage.
-- If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads in small batches and do rollbacks before crashes, security vulnerabilities, etc. affect everyone. Have a small percentage of your userbase recieve the latest changes and monitor for any issues.
-- I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pidegonhole themselves into boosting business/operational value (move fast and break things) but please slow down and invest in cybersecurity practices and talent. Don't make security an afterthought. If you have trouble justifying others the importance of security, frame the conversation around risk management and point to CrowdStrike as a case study. This is also mandated under FISMA.
+- If you pushing updates remotely to customers, please do staggered deployments and not all 8.5 million Windows machines, so you can monitor your changes' in production workloads in small batches and do rollbacks before crashes, security vulnerabilities, etc. affect everyone. Have a small percentage of your userbase receive the latest changes and monitor for any issues.
+- I have been clowning on CrowdStrike but I would like to address all the organizations who are using their product. Procuring a security product is not the end-all be-all of having a secure system. If you don't have the resources to do recovery in a reasonable amount of time, I would argue not having that system in the first place. Organizations tend to have security as an afterthought as they pigeonhole themselves into boosting business/operational value (move fast and break things) but please slow down and invest in cybersecurity practices and talent. Don't make security an afterthought. If you have trouble justifying others the importance of security, frame the conversation around risk management and point to CrowdStrike as a case study. This is also mandated under FISMA.
 - Integrate security from the beginning and throughout a project lifecycle. You can do this even if you are not a security person. There are tabletop exercises that you can involve your product people, developers, testers, security, operations, leadership, etc. to help devise plans and start thinking about security.
     - I don't expect everyone to be perfect. We all make mistakes and we learn on the way. But there should be processes in place to catch these mistakes before they blow up into something big. And in the very rare instance that big thing happens, give out $10 gift cards to add salt to injury. /s
 :::
